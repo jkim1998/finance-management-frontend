@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Box } from "@mui/material";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
@@ -7,21 +8,48 @@ import { themeSettings } from "./theme";
 import Navbar from "@/scenes/navbar";
 import Dashboard from "@/scenes/dashboard";
 import Predictions from "@/scenes/predictions";
+import Plaid from "@/scenes/plaid";
+import Sidebar from "./scenes/sidebar";
 
 function App() {
   const theme = useMemo(() => createTheme(themeSettings), []);
+  const [sidebar, setSidebar] = useState(false);
+  const togglesidebar = () => setSidebar(!sidebar);
+
   return (
     <div className="app">
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <Box width="100%" height="100%" padding="1rem 2rem 4rem 2rem">
-            <Navbar />
+          <Box sx={{  }}>
+            <Navbar  onToggleSidebar={togglesidebar} />
+          </Box>
+          <Box
+            display="flex"
+            flexDirection="row"
+            width="100%"
+            height="95%"
+          >
+            {sidebar && <Sidebar />}
+            <Box sx={{ padding: "1rem 2rem 4rem 2rem" }}>
+              <Routes>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/predictions" element={<Predictions />} />
+                <Route path="/plaid" element={<Plaid />} />
+              </Routes>
+            </Box>
+          </Box>
+          {/* <Box
+            width="100%"
+            height="100%"
+            padding="1rem 2rem 4rem 2rem"
+            bgcolor="yellow"
+          >
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/predictions" element={<Predictions />} />
             </Routes>
-          </Box>
+          </Box> */}
         </ThemeProvider>
       </BrowserRouter>
     </div>
